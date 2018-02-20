@@ -1,4 +1,5 @@
 const assert = require('assert');
+// ganache creates accounts to work with
 const ganache = require('ganache-cli');
 const Web3 = require('web3');
 const sinon = require('sinon');
@@ -42,8 +43,15 @@ describe('Inbox', () => {
     // assert the value exists
     assert.ok(inbox.options.address);
   });
+
   it('has a default message', async () => {
     const message = await inbox.methods.message().call();
     assert.equal(message, INITIAL_STRING);
+  });
+
+  it('can change the message', async () => {
+    await inbox.methods.setMessage('bye').send({ from: accounts[0] });
+    const message = await inbox.methods.message().call();
+    assert.equal(message, 'bye');
   });
 });
