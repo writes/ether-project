@@ -13,16 +13,19 @@ const { interface, bytecode } = require('../compile');
 
 let accounts;
 let inbox;
-let sandbox;
+// let sandbox;
 const INITIAL_STRING = 'Hi There!';
 
 beforeEach(async () => {
   // list accounts
   accounts = await web3.eth.getAccounts();
-  sandbox = sinon.sandbox.create();
+  // sandbox = sinon.sandbox.create();
 
-  sandbox.stub(web3.eth.Contract.prototype, 'deploy').returns('expected returns');
-  sandbox.stub(web3.eth.Contract.prototype, 'send').returns('expected returns');
+  // sandbox
+  //   .stub(web3.eth.Contract.prototype, 'deploy')
+  //   .returns('expected returns');
+  // sandbox.stub(web3.eth.Contract.prototype, 'send').returns('expected returns');
+
   // use accounts to deploy contract
   // represents what exists on chain
   inbox = await new web3.eth.Contract(JSON.parse(interface))
@@ -30,9 +33,9 @@ beforeEach(async () => {
     .send({ from: accounts[0], gas: '1000000' });
 });
 
-afterEach(async () -> {
-  sinon.sandbox.restore();
-});
+// afterEach(async () => {
+//   sinon.sandbox.restore();
+// });
 
 describe('Inbox', () => {
   it('deploys a contract', () => {
