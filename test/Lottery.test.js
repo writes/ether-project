@@ -79,10 +79,11 @@ describe('Lottery Contract', () => {
     try {
       await lottery.methods.enter().send({
         from: accounts[0],
-        value: '200',
+        value: 0,
       });
+      assert(false);
     } catch (err) {
-      assert.ok(err);
+      assert(err);
     }
   });
 });
