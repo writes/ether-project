@@ -3,9 +3,9 @@ const Web3 = require('web3');
 const { interface, bytecode } = require('./compile');
 
 // connect to test network
+// Add Mnemonic to test. Do NOT commit Mnemonic
 const provider = new HDWalletProvider(
-  // TODO: NOT GOOD SECURITY TO HAVE MNEMONIC IN REPO
-  'want yard actual document tackle mercy purse critic tonight shadow pigeon appear',
+  '',
   'https://rinkeby.infura.io/lq2NJUPbSasdRhQGRgNE'
 );
 

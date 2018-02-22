@@ -38,11 +38,11 @@ describe('Lottery Contract', () => {
   it('allows one account to enter', async () => {
     await lottery.methods.enter().send({
       from: accounts[0],
-      value: web3.utils.toWei('.02', 'ether')
+      value: web3.utils.toWei('.02', 'ether'),
     });
 
     const players = await lottery.methods.getPlayers().call({
-      from: accounts[0]
+      from: accounts[0],
     });
 
     assert.equal(accounts[0], players[0]);
@@ -52,21 +52,21 @@ describe('Lottery Contract', () => {
   it('allows multiple accounts to enter', async () => {
     await lottery.methods.enter().send({
       from: accounts[0],
-      value: web3.utils.toWei('.02', 'ether')
+      value: web3.utils.toWei('.02', 'ether'),
     });
 
     await lottery.methods.enter().send({
       from: accounts[1],
-      value: web3.utils.toWei('.02', 'ether')
+      value: web3.utils.toWei('.02', 'ether'),
     });
 
     await lottery.methods.enter().send({
       from: accounts[2],
-      value: web3.utils.toWei('.02', 'ether')
+      value: web3.utils.toWei('.02', 'ether'),
     });
 
     const players = await lottery.methods.getPlayers().call({
-      from: accounts[0]
+      from: accounts[0],
     });
 
     assert.equal(accounts[0], players[0]);
@@ -79,7 +79,7 @@ describe('Lottery Contract', () => {
     try {
       await lottery.methods.enter().send({
         from: accounts[0],
-        value: 0
+        value: 0,
       });
       assert(false);
     } catch (err) {
@@ -90,7 +90,7 @@ describe('Lottery Contract', () => {
   it('only allows manager to call pickWinner', async () => {
     try {
       await lottery.methods.pickWinner().send({
-        from: accounts[1]
+        from: accounts[1],
       });
       assert(false);
     } catch (err) {
@@ -98,20 +98,23 @@ describe('Lottery Contract', () => {
     }
   });
 
-  // only enter one player for simplicity
   it('sends money to the winner and resets the players array', async () => {
     await lottery.methods.enter().send({
       from: accounts[0],
-      value: web3.utils.toWei('2', 'ether')
+      value: web3.utils.toWei('2', 'ether'),
     });
 
     const initialBalance = await web3.eth.getBalance(accounts[0]);
-
     await lottery.methods.pickWinner().send({ from: accounts[0] });
-
     const finalBalance = await web3.eth.getBalance(accounts[0]);
-
     const difference = finalBalance - initialBalance;
+
     assert(difference > web3.utils.toWei('1.8', 'ether'));
+
+    const players = await lottery.methods.getPlayers().call({
+      from: accounts[0],
+    });
+
+    assert.equal(0, players.length);
   });
 });
