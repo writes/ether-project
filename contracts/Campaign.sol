@@ -1,17 +1,44 @@
-/*
-Variables
+pragma solidity ^0.4.17;
 
-manager - owner of contract
-minimumContribution - min to enter
-!!!! approvers - approvers of payments to manager
-requests - list of requests the manager has created
+contract Campaign {
+    // struct definition not an instance
+    struct Request {
+        string description;
+        uint value;
+        address recipient;
+        bool complete;
+    }
 
+    Request[] public requests;
+    address public manager;
+    uint public minimumContribution;
+    address[] public approvers;
 
-Functions
+    modifier restricted() {
+        require(msg.sender == manager);
+        _;
+    }
 
-Campaign
-contribute
-createRequest
-!!!! approveRequest
-finalizeRequest
- */
+    function Campaign(uint minimum) public {
+        manager = msg.sender;
+        minimumContribution = minimum;
+    }
+
+    function contribute() public payable {
+        require(msg.value > minimumContribution);
+
+        approvers.push(msg.sender);
+    }
+
+    function createRequest(string description, uint value, address recipient) public restricted {
+        // create new variable of type Request named newRequest which equals an instance of a struct
+        Request newRequest = Request({
+           description: description,
+           value: value,
+           recipient: recipient,
+           complete: false
+        });
+
+        requests.push(newRequest);
+    }
+}
